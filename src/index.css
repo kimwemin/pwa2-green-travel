@@ -5,5 +5,10 @@
 }
 
 body {
-  background-color: #000;
+  background-color: #0A0A0F;
+}
+
+#root {
+  margin: 0 auto;
+  max-width: 1000px;
 }
