@@ -4,9 +4,12 @@ import { useEffect } from 'react';
 import { festivalIndex } from '../../store/thunks/festivalThunk.js';
 import { dateFormatter } from '../../utils/dateFormatterUtil.js';
 import { setScrollEventFlg } from '../../store/slices/festivalSlice.js';
+import { useNavigate } from 'react-router-dom';
+// import { setFestivalInfo } from '../../store/slices/festivalShowSlice.js';
 
 function FestivalList() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const festivalList = useSelector(state => state.festival.list);
   // const page = useSelector(state => state.festival.page);
@@ -15,12 +18,6 @@ function FestivalList() {
   // 스테일 클로저 현상을 피하기 위해 useEffect 분리
   // 이후 thunk와 slice에서 state를 관리함에 따라 디펜던시 제거 및 useEffect 합침(아규먼트를 보내지 않는 방식), 유지 보수적인 측면에서 이전 방식보다 낫다.
   useEffect(() => {
-    // 로컬스토리지에 저장된 날짜를 획득
-    //   저장된 날짜 없으면 로컬스토리지에 현재 날짜 저장
-    //   저장된 날짜 있으면 아래처리 속행
-    //      오늘 날짜랑 비교
-    //        날짜가 과거면 로컬 스토리지 및 스테이트 초기화
-    //        아직 과거가 아니면 처리 속행
     window.addEventListener('scroll', addNextPage);
 
     if(festivalList.length === 0) {
@@ -49,6 +46,12 @@ function FestivalList() {
     }
   }
 
+  // 상세페이지로 이동
+  function redirectShow(item) {
+    // dispatch(setFestivalInfo(item));
+    navigate(`/festivals/${item.contentid}`);
+  }
+
   return (
     <>
       <div className="container">
@@ -57,7 +60,7 @@ function FestivalList() {
           festivalList.map(item => {
             return (
               // key는 고유한 값(보편적으로 pk로 명명함), 정해진 pk가 없다면 값들을 조합해 아래처럼 겹치지 않을 값으로 만들 수도 있다.
-              <div className="card" key={item.contentid + item.createdtime}>
+              <div className="card" onClick={() => { redirectShow(item) }} key={item.contentid + item.createdtime}>
                 <div className="card-img" style={{backgroundImage: `url('${item.firstimage}')`}}></div>
                 <p className='card-title'>{item.title}</p>
                 <p className="card-period">{dateFormatter.withHyphenYMD(item.eventstartdate)} ~ {dateFormatter.withHyphenYMD(item.eventenddate)}</p>
