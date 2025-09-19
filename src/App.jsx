@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { localStorageUtil } from './utils/localStorageUtil.js';
 import { dateFormatter } from './utils/dateFormatterUtil.js';
 import BeforeInstallPrompt from './components/BeforeInstallPrompt.jsx';
+import ListTopBar from './components/common/ListTopBar.jsx';
 
 function App() {
   // 여기저기서 쓰일 예정이기 때문에 App에서 작업
@@ -27,7 +28,8 @@ function App() {
   return (
     <>
       <BeforeInstallPrompt />
-      <Header></Header>
+      <Header />
+      <ListTopBar />
       <main>
         <Outlet />
       </main>
